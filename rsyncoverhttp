@@ -18,7 +18,7 @@ display_usage() {
     echo "Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads."
     echo "Options:"
     echo "  -s, --source-url       Specify the source URL (mandatory)."
-    echo "  -d, --destination      Specify the destination directory (optional, default is \"~/\")."
+    echo "  -d, --destination      Specify the destination directory (optional, default is ~/"
     echo "  -n, --newer-only       Download only newer files (optional)."
     echo "  -r, --resume           Resume interrupted downloads (optional)."
     echo "  --help                 Display this help message."
