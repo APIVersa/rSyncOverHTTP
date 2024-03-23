@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # Script: rSync Over HTTP
-# Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads.
+# Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads. Also updates all directories to newest file timestamp and keeps file timestamps synced. Mimicks over HTTP the behavior of rsync -av.
 # Version: 1.1
-# Usage: rSyncOverHTTP.sh -s|--source-url SOURCE_URL [-d|--destination DESTINATION] [-n|--newer-only] [-r|--resume]
+# Author: API VERSA OÜ
+# Usage: rsyncoverhttp -s|--source-url SOURCE_URL [-d|--destination DESTINATION] [-n|--newer-only] [-r|--resume]
 #   -s, --source-url       Specify the source URL (mandatory).
 #   -d, --destination      Specify the destination directory (optional, default is "~/").
 #   -n, --newer-only       Download only newer files (optional).
@@ -13,12 +14,14 @@
 
 # Function to display usage
 display_usage() {
-    echo "Usage: $0 -s|--source-url SOURCE_URL [-d|--destination DESTINATION] [-n|--newer-only] [-r|--resume]"
+    echo "Usage: rsyncoverhttp -s|--source-url SOURCE_URL [-d|--destination DESTINATION] [-n|--newer-only] [-r|--resume]"
+    echo "rSync Over HTTP"
+    echo "Author: API VERSA OÜ"
     echo "Version: 1.1"
-    echo "Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads."
+    echo "Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads. Also updates all directories to newest file timestamp and keeps file timestamps synced. Mimicks over HTTP the behavior of rsync -av."
     echo "Options:"
     echo "  -s, --source-url       Specify the source URL (mandatory)."
-    echo "  -d, --destination      Specify the destination directory (optional, default is ~/"
+    echo "  -d, --destination      Specify the destination directory (optional, default is ~/)"
     echo "  -n, --newer-only       Download only newer files (optional)."
     echo "  -r, --resume           Resume interrupted downloads (optional)."
     echo "  --help                 Display this help message."
