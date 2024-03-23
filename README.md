@@ -6,9 +6,9 @@ A script to mirror a file server over HTTP, optionally downloading only newer fi
 - Add more flags and optional usage criteria
 
 # Installation:
-## wget the file to /usr/bin
+## Step 1: wget the file to /usr/bin
 wget file_url -O /usr/bin/rsyncoverhttp
-## chmod +x the file
+## Step 2: chmod +x the file
 chmod +x /usr/bin/rsyncoverhttp
-## use rsyncoverhttp command to run your commands
+## Step 3: use rsyncoverhttp command to run your commands
 rsyncoverhttp --help
