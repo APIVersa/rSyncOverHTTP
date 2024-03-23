@@ -3,6 +3,7 @@ A script to mirror a file server over HTTP, optionally downloading only newer fi
 
 # TODO:
 - Update owner info to the one that ran the script
+- Add flag for user-agent
 - Add more flags and optional usage criteria
 
 # Installation:
