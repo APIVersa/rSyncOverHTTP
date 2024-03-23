@@ -5,7 +5,7 @@
 # Version: 1.1
 # Usage: rSyncOverHTTP.sh -s|--source-url SOURCE_URL [-d|--destination DESTINATION] [-n|--newer-only] [-r|--resume]
 #   -s, --source-url       Specify the source URL (mandatory).
-#   -d, --destination      Specify the destination directory (optional, default is "./").
+#   -d, --destination      Specify the destination directory (optional, default is "~/").
 #   -n, --newer-only       Download only newer files (optional).
 #   -r, --resume           Resume interrupted downloads (optional).
 #   --help                 Display this help message.
@@ -18,7 +18,7 @@ display_usage() {
     echo "Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads."
     echo "Options:"
     echo "  -s, --source-url       Specify the source URL (mandatory)."
-    echo "  -d, --destination      Specify the destination directory (optional, default is \"./\")."
+    echo "  -d, --destination      Specify the destination directory (optional, default is \"~/\")."
     echo "  -n, --newer-only       Download only newer files (optional)."
     echo "  -r, --resume           Resume interrupted downloads (optional)."
     echo "  --help                 Display this help message."
@@ -84,9 +84,9 @@ if [ -z "$source_url" ]; then
     exit 1
 fi
 
-# If destination directory is not provided, default to "./"
+# If destination directory is not provided, default to "~/"
 if [ -z "$destination_dir" ]; then
-    destination_dir="./"
+    destination_dir="~/"
 fi
 
 # Ensure the destination directory doesn't end with a double slash
