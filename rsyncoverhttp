@@ -1,0 +1,145 @@
+#!/bin/bash
+
+# Script: rSync Over HTTP
+# Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads.
+# Version: 1.1
+# Usage: rSyncOverHTTP.sh -s|--source-url SOURCE_URL [-d|--destination DESTINATION] [-n|--newer-only] [-r|--resume]
+#   -s, --source-url       Specify the source URL (mandatory).
+#   -d, --destination      Specify the destination directory (optional, default is "./").
+#   -n, --newer-only       Download only newer files (optional).
+#   -r, --resume           Resume interrupted downloads (optional).
+#   --help                 Display this help message.
+# Example: rSyncOverHTTP.sh -s http://example.com/files/ -d /path/to/destination -nr
+
+# Function to display usage
+display_usage() {
+    echo "Usage: $0 -s|--source-url SOURCE_URL [-d|--destination DESTINATION] [-n|--newer-only] [-r|--resume]"
+    echo "Version: 1.1"
+    echo "Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads."
+    echo "Options:"
+    echo "  -s, --source-url       Specify the source URL (mandatory)."
+    echo "  -d, --destination      Specify the destination directory (optional, default is \"./\")."
+    echo "  -n, --newer-only       Download only newer files (optional)."
+    echo "  -r, --resume           Resume interrupted downloads (optional)."
+    echo "  --help                 Display this help message."
+    echo "Example: $0 -s http://example.com/files/ -d /path/to/destination -nr"
+}
+
+# Parse command-line arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -s|--source-url)
+            source_url="$2"
+            shift 2
+            ;;
+        -d|--destination)
+            destination_dir="$2"
+            shift 2
+            ;;
+        -n|--newer-only)
+            newer_only=true
+            shift
+            ;;
+        -r|--resume)
+            resume=true
+            shift
+            ;;
+        --help)
+            display_usage
+            exit 0
+            ;;
+        -*)
+            flags="${1:1}" # Get all flags without "-"
+            while [ -n "$flags" ]; do
+                flag="${flags:0:1}"
+                case "$flag" in
+                    n)
+                        newer_only=true
+                        ;;
+                    r)
+                        resume=true
+                        ;;
+                    *)
+                        echo "Error: Invalid flag '$flag'"
+                        display_usage
+                        exit 1
+                        ;;
+                esac
+                flags="${flags:1}"
+            done
+            shift
+            ;;
+        *)
+            echo "Error: Invalid argument '$1'"
+            display_usage
+            exit 1
+            ;;
+    esac
+done
+
+# If no source URL provided, display usage and exit
+if [ -z "$source_url" ]; then
+    echo "Error: Source URL is mandatory."
+    display_usage
+    exit 1
+fi
+
+# If destination directory is not provided, default to "./"
+if [ -z "$destination_dir" ]; then
+    destination_dir="./"
+fi
+
+# Ensure the destination directory doesn't end with a double slash
+destination_dir="${destination_dir//\/\//\/}"
+
+# Validate source URL
+if ! wget --spider "$source_url" 2>/dev/null; then
+    echo "Error: '$source_url' is not a valid URL or cannot be reached."
+    exit 1
+fi
+
+# Function to mirror a file server
+mirror_file_server() {
+    local source_url="$1"
+    local destination_dir="$2"
+    local wget_options=("--recursive" "--no-parent" "--no-host-directories" "--directory-prefix=$destination_dir" "--reject=*.html,*.html*" "--timestamping" "-e robots=off" "--no-verbose" "--show-progress" "--mirror" "--recursive" "--timestamping")
+
+    # Add options for newer files and resume
+    if [ "$newer_only" = true ]; then
+        wget_options+=("--level=inf" "--no-remove-listing" "--accept=*" "--mirror")
+    fi
+
+    if [ "$resume" = true ]; then
+        wget_options+=("--continue")
+    fi
+
+    # Use wget to mirror the file server
+    wget "${wget_options[@]}" "$source_url"
+
+    # Update timestamps of folders recursively
+    update_folders_recursively "$destination_dir"
+}
+
+# Function to find the latest file in a directory
+find_latest_file() {
+    latest_file=$(find "$1" -type f -printf '%T@ %p\n' 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
+    echo "$latest_file"
+}
+
+# Function to recursively update folders
+update_folders_recursively() {
+    local current_dir="$1"
+    local latest_file=$(find_latest_file "$current_dir")
+
+    if [ -n "$latest_file" ]; then
+        for dir in "$current_dir"*/; do
+            update_folders_recursively "$dir"
+        done
+        echo "Updating folder: $current_dir"
+        touch -r "$latest_file" "$current_dir" # Update directory timestamp to match the latest file
+    fi
+}
+
+# Mirror the file server
+mirror_file_server "$source_url" "$destination_dir"
+
