@@ -25,7 +25,7 @@ display_usage() {
     echo "  -n, --newer-only       Download only newer files (optional)."
     echo "  -r, --resume           Resume interrupted downloads (optional)."
     echo "  --help                 Display this help message."
-    echo "Example: $0 -s http://example.com/files/ -d /path/to/destination -nr"
+    echo "Example: rsyncoverhttp -s http://example.com/files/ -d /path/to/destination -nr"
 }
 
 # Parse command-line arguments
