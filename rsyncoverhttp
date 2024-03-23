@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script: rSync Over HTTP
-# Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads. Also updates all directories to newest file timestamp and keeps file timestamps synced. Mimicks over HTTP the behavior of rsync -av.
+# Description: A script to mirror a file server over HTTP, optionally downloading only newer files, and supporting resumable downloads. Also updates all directories to newest file timestamp and keeps file timestamps synced. Mimicks over HTTP the behavior of rsync -av.
 # Version: 1.1
 # Author: API VERSA OÜ
 # Usage: rsyncoverhttp -s|--source-url SOURCE_URL [-d|--destination DESTINATION] [-n|--newer-only] [-r|--resume]
@@ -18,7 +18,7 @@ display_usage() {
     echo "rSync Over HTTP"
     echo "Author: API VERSA OÜ"
     echo "Version: 1.1"
-    echo "Description: A script to mirror a file server over HTTP, optionally downloading only newer files or files that do not already exist, and supporting resumable downloads. Also updates all directories to newest file timestamp and keeps file timestamps synced. Mimicks over HTTP the behavior of rsync -av."
+    echo "Description: A script to mirror a file server over HTTP, optionally downloading only newer files, and supporting resumable downloads. Also updates all directories to newest file timestamp and keeps file timestamps synced. Mimicks over HTTP the behavior of rsync -av."
     echo "Options:"
     echo "  -s, --source-url       Specify the source URL (mandatory)."
     echo "  -d, --destination      Specify the destination directory (optional, default is ~/)"
