@@ -10,7 +10,7 @@
 #   -n, --newer-only       Download only newer files (optional).
 #   -r, --resume           Resume interrupted downloads (optional).
 #   --help                 Display this help message.
-# Example: rSyncOverHTTP.sh -s http://example.com/files/ -d /path/to/destination -nr
+# Example: rsyncoverhttp -s http://example.com/files/ -d /path/to/destination -nr
 
 # Function to display usage
 display_usage() {
